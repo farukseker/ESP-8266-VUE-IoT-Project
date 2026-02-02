@@ -1,42 +1,60 @@
-# panel
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## ESP (Panel) kurulumu için
 
 ```sh
-bun install
+bun i
 ```
 
-### Compile and Hot-Reload for Development
+## Eğer ESP (Panel) geliştirmek isterseniz
 
 ```sh
-bun dev
+bun run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+## ESP Build (Panel)
+
+ESP üzerinde çalışacak panel için **özel build** alınması gerekir.
+
+
+### ESP için Build Alma
+
+ESP’ye yüklenecek arayüzü üretmek için aşağıdaki komut kullanılmalıdır:
 
 ```sh
-bun run build
+bun run build:esp
 ```
+
+Bu komut sonucunda bir **`dist/`** klasörü oluşur.
+
+### Arduino / ESP Tarafı
+
+ESP tarafında dosya sistemi (LittleFS veya SPIFFS) kullanıldığı için:
+
+* Oluşan **`dist/` klasörü**
+* **Arduino projesindeki `data/` klasörünün içine** kopyalanmalıdır
+
+Örnek yapı:
+
+```text
+esp-project/
+ ├─ esp-project.ino
+ └─ data/
+     ├─ index.html
+     ├─ assets/
+     └─ favicon.ico
+```
+
+> Not: `dist/` içeriği doğrudan `data/` altına kopyalanmalıdır, `data/dist` şeklinde olmamalıdır.
+
+### Dosyaları ESP’ye Yükleme
+
+Kullandığın Arduino IDE sürümüne göre uygun uploader ile `data/` klasörünü ESP’ye yükle:
+
+* Arduino IDE 1.x
+
+  * ESP8266 LittleFS Data Upload
+* Arduino IDE 2.x
+
+  * arduino-littlefs-upload (Command Palette üzerinden)
+
+Yükleme tamamlandıktan sonra ESP, panel dosyalarını doğrudan dosya sisteminden servis eder.
+
